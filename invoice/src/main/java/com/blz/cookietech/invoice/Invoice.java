@@ -135,6 +135,8 @@ public class Invoice extends AppCompatActivity {
 
        if (item.getItemId() == R.id.menu_edit){
            menuItem.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+           menuItem.getItem(0).setVisible(false);
+           menuItem.getItem(1).setVisible(true);
            menuItem.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
            EnableEdit();
            btn_send_invoice.setVisibility(View.GONE);
@@ -142,6 +144,8 @@ public class Invoice extends AppCompatActivity {
 
        else if (item.getItemId() == R.id.menu_done){
            menuItem.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+           menuItem.getItem(1).setVisible(false);
+           menuItem.getItem(0).setVisible(true);
            menuItem.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
            DisableEdit();
            btn_send_invoice.setVisibility(View.VISIBLE);

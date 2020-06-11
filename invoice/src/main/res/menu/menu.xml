@@ -12,7 +12,8 @@
         android:id="@+id/menu_done"
         android:title="@string/done"
         android:icon="@drawable/ic_done_black_24dp"
-        app:showAsAction="never"/>
+        app:showAsAction="never"
+        android:visible="false"/>
     <item
         android:title="@string/download"
         android:id="@+id/meu_download"
