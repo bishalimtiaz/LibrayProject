@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ public class Invoice extends AppCompatActivity {
     private EditText customer_phone;
     private EditText customer_email;
     private EditText customer_address;
+    private Button btn_send_invoice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class Invoice extends AppCompatActivity {
         TextView total_vat = findViewById(R.id.total_vat);
         TextView txt_vat = findViewById(R.id.txt_vat);
         TextView total_amount = findViewById(R.id.total_amount);
+        btn_send_invoice = findViewById(R.id.btn_send_invoice);
 
 
         double sumTotal = 0;
@@ -134,12 +137,14 @@ public class Invoice extends AppCompatActivity {
            menuItem.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
            menuItem.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
            EnableEdit();
+           btn_send_invoice.setVisibility(View.GONE);
        }
 
        else if (item.getItemId() == R.id.menu_done){
            menuItem.getItem(1).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
            menuItem.getItem(0).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
            DisableEdit();
+           btn_send_invoice.setVisibility(View.VISIBLE);
 
        }
 
