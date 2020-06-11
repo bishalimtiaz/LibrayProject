@@ -7,15 +7,17 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/btn_invoice"
+        android:id="@+id/btn_invoice_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/invoice"
+        android:text="Invoice For Services"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textAllCaps="false">
+        app:layout_constraintVertical_chainStyle="packed">
 
     </Button>
 
