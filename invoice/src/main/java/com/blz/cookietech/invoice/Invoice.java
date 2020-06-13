@@ -4,23 +4,34 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
-
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Invoice extends AppCompatActivity {
+public class Invoice extends AppCompatActivity{
 
     private Menu menuItem;
     private EditText customer_name;
@@ -28,6 +39,8 @@ public class Invoice extends AppCompatActivity {
     private EditText customer_email;
     private EditText customer_address;
     private Button btn_send_invoice;
+    private ScrollView root_scrollView;
+    String receiver_email,service_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +49,15 @@ public class Invoice extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        root_scrollView = findViewById(R.id.root_scrollView);
 
         Intent intent = getIntent();
         CustomerDetails detailsForServices = intent.getParcelableExtra("service_details");
-        ArrayList<Services> serviceList = intent.getParcelableArrayListExtra("service_list");
         assert detailsForServices != null;
+        receiver_email = detailsForServices.getCustomer_email();
+        service_id = detailsForServices.getService_id();
+        ArrayList<Services> serviceList = intent.getParcelableArrayListExtra("service_list");
+
         assert serviceList != null;
         CreateInvoiceForService(detailsForServices,serviceList);
 
@@ -53,6 +70,94 @@ public class Invoice extends AppCompatActivity {
                 showAlert();
             }
         });
+
+        btn_send_invoice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btn_send_invoice.setVisibility(View.GONE);
+                GeneratePdf();
+            }
+        });
+    }
+
+    private void GeneratePdf() {
+
+        View view = findViewById(R.id.root_scrollView);
+
+        int totalHeight = root_scrollView.getChildAt(0).getHeight();
+        int totalWidth = root_scrollView.getChildAt(0).getWidth();
+        int btn_height = btn_send_invoice.getHeight();
+        Bitmap bitmap = getBitmapFromView(view,totalHeight-btn_height,totalWidth);
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        this.getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        float height = displaymetrics.heightPixels ;
+        float width = displaymetrics.widthPixels ;
+
+        int convertHeight = (int) height, convertWidth = (int) width;
+
+        PdfDocument document = new PdfDocument();
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(convertWidth, convertHeight, 1).create();
+        PdfDocument.Page page = document.startPage(pageInfo);
+
+        Canvas canvas = page.getCanvas();
+
+        Paint paint = new Paint();
+        canvas.drawPaint(paint);
+
+        bitmap = Bitmap.createScaledBitmap(bitmap, convertWidth, convertHeight, true);
+
+        paint.setColor(Color.BLUE);
+        canvas.drawBitmap(bitmap, 0, 0 , null);
+        document.finishPage(page);
+
+        File file = new File(getExternalCacheDir(),"invoice_"+service_id+".pdf");
+        try {
+            document.writeTo(new FileOutputStream(file));
+            document.close();
+            file.setReadable(true,false);
+            SharePdf(file);
+            btn_send_invoice.setVisibility(View.VISIBLE);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }
+
+
+
+    private  void SharePdf(File file) {
+
+        Uri fileUri =  FileProvider.getUriForFile(Invoice.this, getApplicationContext().getPackageName() + ".provider", file);
+
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+        intent.putExtra(Intent.EXTRA_EMAIL,receiver_email);
+        intent.putExtra(Intent.EXTRA_SUBJECT,"Invoice for Service");
+        intent.setType("application/pdf");
+        //need to fix the bug if no shareable app found
+        startActivity(Intent.createChooser(intent,"Share Invoice Via"));
+
+
+    }
+
+
+
+    private Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
+        Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth,totalHeight , Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas);
+        else
+            canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return returnedBitmap;
     }
 
     private void CreateInvoiceForService(CustomerDetails detailsForServices, ArrayList<Services> serviceList) {
@@ -203,4 +308,7 @@ public class Invoice extends AppCompatActivity {
 
         exitAlert.show();
     }
+
+
+
 }
