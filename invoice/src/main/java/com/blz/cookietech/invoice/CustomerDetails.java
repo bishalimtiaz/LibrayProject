@@ -15,9 +15,10 @@ public class CustomerDetails implements Parcelable {
     private String service_provider;
     private String service_category;
     private double vat = 0;
+    String service_id;
 
 
-    public CustomerDetails(String due_date, String customer_name, String customer_phone, String customer_email, String customer_address, String service_provider, String service_category,double vat) {
+    public CustomerDetails(String due_date, String customer_name, String customer_phone, String customer_email, String customer_address, String service_provider, String service_category,String service_id,double vat) {
         this.due_date = due_date;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
@@ -25,12 +26,13 @@ public class CustomerDetails implements Parcelable {
         this.customer_address = customer_address;
         this.service_provider = service_provider;
         this.service_category = service_category;
+        this.service_id = service_id;
         this.vat = vat;
 
 
     }
 
-    public CustomerDetails(String due_date, String customer_name, String customer_phone, String customer_email, String customer_address, String service_provider, String service_category) {
+    public CustomerDetails(String due_date, String customer_name, String customer_phone, String customer_email, String customer_address, String service_provider, String service_category,String service_id) {
         this.due_date = due_date;
         this.customer_name = customer_name;
         this.customer_phone = customer_phone;
@@ -38,6 +40,7 @@ public class CustomerDetails implements Parcelable {
         this.customer_address = customer_address;
         this.service_provider = service_provider;
         this.service_category = service_category;
+        this.service_id = service_id;
 
 
 
@@ -53,6 +56,7 @@ public class CustomerDetails implements Parcelable {
         customer_address = in.readString();
         service_provider = in.readString();
         service_category = in.readString();
+        service_id = in.readString();
         vat = in.readDouble();
     }
 
@@ -98,6 +102,9 @@ public class CustomerDetails implements Parcelable {
         return service_category;
     }
 
+    public String getService_id() {
+        return service_id;
+    }
 
     public double getVat() {
         return vat;
@@ -117,6 +124,7 @@ public class CustomerDetails implements Parcelable {
         dest.writeString(customer_address);
         dest.writeString(service_provider);
         dest.writeString(service_category);
+        dest.writeString(service_id);
         dest.writeDouble(vat);
     }
 }

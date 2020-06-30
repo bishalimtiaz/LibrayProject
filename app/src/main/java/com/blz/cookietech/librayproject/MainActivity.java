@@ -37,8 +37,9 @@ public class MainActivity extends AppCompatActivity {
                 String customer_address = "57/3, Gulshan, Dhaka";
                 String service_provider = "Akash Shahriar";
                 String service_category = "Paint Job";
+                String service_id = "101";
                 double vat =7.5;
-                CustomerDetails detailsForServices = new CustomerDetails(due_date,customer_name,customer_phone,customer_email,customer_address,service_provider,service_category,vat);
+                CustomerDetails detailsForServices = new CustomerDetails(due_date,customer_name,customer_phone,customer_email,customer_address,service_provider,service_category,service_id,vat);
                 Intent intent = new Intent(MainActivity.this,Invoice.class);
                 intent.putExtra("service_details",detailsForServices);
                 intent.putExtra("service_list",services);

@@ -23,6 +23,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
+        android:id="@+id/root_scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +31,8 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.0">
+        app:layout_constraintVertical_bias="0.0"
+        android:scrollbars="none" >
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -135,7 +137,8 @@
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/name"
                     app:layout_constraintEnd_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toTopOf="@+id/name" />
+                    app:layout_constraintTop_toTopOf="@+id/name"
+                    />
 
                 <TextView
                     android:id="@+id/textView5"
@@ -296,7 +299,9 @@
                     android:orientation="vertical"
                     app:layout_constraintEnd_toStartOf="@+id/guideline8"
                     app:layout_constraintStart_toStartOf="@+id/guideline7"
-                    app:layout_constraintTop_toBottomOf="@+id/service_details_rv"></LinearLayout>
+                    app:layout_constraintTop_toBottomOf="@+id/service_details_rv">
+
+                </LinearLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraintLayout6"
